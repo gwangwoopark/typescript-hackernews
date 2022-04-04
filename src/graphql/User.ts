@@ -1,4 +1,3 @@
-import { toApolloError } from "apollo-server";
 import { objectType } from "nexus";
 
 export const User = objectType({
@@ -9,7 +8,7 @@ export const User = objectType({
         t.nonNull.string("email");
         t.nonNull.list.nonNull.field("links", {
             type: "Link",
-            resolve(parent, args, context, info) {
+            resolve(parent, args, context) {
                 return context.prisma.user
                     .findUnique({ where: { id: parent.id } })
                     .links();
@@ -17,7 +16,7 @@ export const User = objectType({
         });
         t.nonNull.list.nonNull.field("votes", {
             type: "Link",
-            resolve(parent, args, context, info) {
+            resolve(parent, args, context) {
                 return context.prisma.user
                     .findUnique({ where: { id: parent.id }})
                     .votes();

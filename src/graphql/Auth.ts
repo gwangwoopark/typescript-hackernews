@@ -2,7 +2,6 @@ import { objectType, extendType, nonNull, stringArg } from "nexus";
 import * as bcrypt from "bcryptjs";
 import * as jwt from "jsonwebtoken";
 import { APP_SECRET } from "../utils/auth";
-import { User } from "./User";
 
 export const AuthPayload = objectType({
     name: "AuthPayload",
@@ -24,7 +23,7 @@ export const AuthMutation = extendType({
                 password: nonNull(stringArg()),
                 name: nonNull(stringArg()),
             },
-            async resolve(parent, args, context, info) {
+            async resolve(parent, args, context) {
                 const { email, name } = args;
                 const password = await bcrypt.hash(args.password, 10);
                 const user = await context.prisma.user.create({
@@ -43,7 +42,7 @@ export const AuthMutation = extendType({
                 email: nonNull(stringArg()),
                 password: nonNull(stringArg()),
             },
-            async resolve(parent, args, context, info) {
+            async resolve(parent, args, context) {
                 const user = await context.prisma.user.findUnique({
                     where: { email: args.email },
                 });
